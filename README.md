@@ -50,26 +50,34 @@ We've implemented comprehensive reporting capabilities that transform raw findin
 - Added CSV export functionality for data analysis
 - Designed the reporting system with PostgreSQL integration
 
-### Phase 3: Advanced Security Checks (In Progress)
+### Phase 3: Advanced Security Checks (Completed)
 
-We're expanding our security coverage to include more GCP services and specialized checks:
+We've expanded our security coverage to include more GCP services and specialized checks:
 
 - Kubernetes security configuration analysis
 - Cloud Functions permission and security scanning
 - Default service account usage detection
 - Network security group analysis
 
-### Phase 4: Compliance Frameworks (Planned)
+### Phase 4: Compliance Frameworks (Completed)
 
-- Mapping findings to specific compliance requirements
-- Creating compliance-specific reports
-- Implementing remediation guidance aligned with standards
+We've implemented comprehensive compliance mapping functionality:
 
-### Phase 5: Automation & Integration (Planned)
+- Created mapping files connecting security findings to compliance controls for:
+  - NIST 800-53 Rev. 5
+  - SOC2 Trust Services Criteria
+  - PCI-DSS 3.2.1
+- Developed a compliance mapper module that integrates with the reporting system
+- Added compliance-specific HTML reports with detailed control analysis
+- Implemented compliance scoring to track compliance posture over time
+- Enhanced reporting to show affected controls and remediation guidance
 
-- Creating CI/CD integration
-- Building notification systems
-- Implementing scheduling and regular scanning
+### Phase 5: Automation & Integration (In Progress)
+
+- Created a unified scanning script that automates the entire process
+- Configuring scheduling and regular scanning capabilities
+- Planning notification system integration
+- Designing CI/CD pipelines for continuous security validation
 
 ## Design Philosophy
 

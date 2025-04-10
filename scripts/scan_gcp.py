@@ -16,11 +16,12 @@ import time
 from pathlib import Path
 
 class GCPSecurityScanner:
-    def __init__(self, config_dir=None, query_dir=None, output_dir=None):
+    def __init__(self, config_dir=None, query_dir=None, output_dir=None, compliance_dir=None):
         self.base_dir = Path(__file__).parent.parent.absolute()
         self.config_dir = Path(config_dir) if config_dir else self.base_dir / "config"
         self.query_dir = Path(query_dir) if query_dir else self.base_dir / "queries"
         self.output_dir = Path(output_dir) if output_dir else self.base_dir / "reports"
+        self.compliance_dir = Path(compliance_dir) if compliance_dir else self.base_dir / "config" / "compliance"
         self.timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         
         # Create directories if they don't exist
@@ -72,10 +73,16 @@ class GCPSecurityScanner:
         
         print("⏳ Generating security reports...")
         try:
-            result = subprocess.run([sys.executable, str(report_script), 
-                                     "--query-dir", str(self.query_dir),
-                                     "--output-dir", str(self.output_dir)],
-                                    capture_output=True, text=True, check=False)
+            cmd = [sys.executable, str(report_script), 
+                   "--query-dir", str(self.query_dir),
+                   "--output-dir", str(self.output_dir)]
+            
+            # Add compliance directory if it exists
+            if self.compliance_dir.exists():
+                print(f"ℹ️ Using compliance frameworks from: {self.compliance_dir}")
+                cmd.extend(["--compliance-dir", str(self.compliance_dir)])
+            
+            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
             
             if result.returncode == 0:
                 print("✅ Security reports generated successfully")
@@ -92,6 +99,13 @@ class GCPSecurityScanner:
         """Run the complete security scanning process"""
         print("\n🔐 GCP Security Scanner - Starting full scan")
         print("=" * 60)
+        
+        # Check if compliance frameworks are available
+        if self.compliance_dir.exists() and any(self.compliance_dir.glob("*.json")):
+            print(f"✅ Compliance frameworks found in {self.compliance_dir}")
+            frameworks = list(self.compliance_dir.glob("*.json"))
+            for framework in frameworks:
+                print(f"  - {framework.stem}")
         
         start_time = time.time()
         
@@ -124,6 +138,7 @@ def main():
     parser.add_argument('--config-dir', help='Directory containing CloudQuery configuration files')
     parser.add_argument('--query-dir', help='Directory containing security SQL queries')
     parser.add_argument('--output-dir', help='Directory to save security reports')
+    parser.add_argument('--compliance-dir', help='Directory containing compliance framework mappings')
     parser.add_argument('--config-file', default='gcp.yml', help='CloudQuery configuration file name')
     
     args = parser.parse_args()
@@ -131,7 +146,8 @@ def main():
     scanner = GCPSecurityScanner(
         config_dir=args.config_dir,
         query_dir=args.query_dir,
-        output_dir=args.output_dir
+        output_dir=args.output_dir,
+        compliance_dir=args.compliance_dir
     )
     
     success = scanner.run_full_scan(config_file=args.config_file)

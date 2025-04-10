@@ -1,0 +1,188 @@
+{
+    "framework": "PCI-DSS",
+    "version": "3.2.1",
+    "description": "Payment Card Industry Data Security Standard",
+    "url": "https://www.pcisecuritystandards.org/document_library",
+    "mappings": [
+        {
+            "finding_type": "Public Storage Bucket",
+            "controls": [
+                {
+                    "id": "1.3",
+                    "name": "Prohibit Direct Public Access",
+                    "description": "Prohibit direct public access between the Internet and any system component in the cardholder data environment."
+                },
+                {
+                    "id": "7.1",
+                    "name": "Limit Access to Cardholder Data",
+                    "description": "Limit access to system components and cardholder data to only those individuals whose job requires such access."
+                }
+            ]
+        },
+        {
+            "finding_type": "Unencrypted Disk",
+            "controls": [
+                {
+                    "id": "3.4",
+                    "name": "Render PAN Unreadable",
+                    "description": "Render PAN unreadable anywhere it is stored (including on portable digital media, backup media, and in logs)."
+                },
+                {
+                    "id": "8.2.1",
+                    "name": "Encryption of Credentials",
+                    "description": "Using strong cryptography, render all authentication credentials (such as passwords/phrases) unreadable during transmission and storage on all system components."
+                }
+            ]
+        },
+        {
+            "finding_type": "Legacy Authentication Enabled",
+            "controls": [
+                {
+                    "id": "8.2",
+                    "name": "Strong Authentication",
+                    "description": "Employ at least one of the following methods to authenticate all users: something you know, something you have, or something you are."
+                },
+                {
+                    "id": "8.1",
+                    "name": "User Identification",
+                    "description": "Define and implement policies and procedures to ensure proper user identification management for non-consumer users and administrators on all system components."
+                }
+            ]
+        },
+        {
+            "finding_type": "Network Policy Disabled",
+            "controls": [
+                {
+                    "id": "1.1",
+                    "name": "Network Configuration Standards",
+                    "description": "Establish and implement firewall and router configuration standards that include a formal process for approving and testing all network connections and changes to the firewall and router configurations."
+                },
+                {
+                    "id": "1.2",
+                    "name": "Security Between Networks",
+                    "description": "Build firewall and router configurations that restrict connections between untrusted networks and any system components in the cardholder data environment."
+                }
+            ]
+        },
+        {
+            "finding_type": "Node Auto-Upgrade Disabled",
+            "controls": [
+                {
+                    "id": "6.1",
+                    "name": "Security Patches",
+                    "description": "Establish a process to identify security vulnerabilities, using reputable outside sources for security vulnerability information, and assign a risk ranking to newly discovered security vulnerabilities."
+                },
+                {
+                    "id": "6.2",
+                    "name": "Security Updates",
+                    "description": "Ensure that all system components and software are protected from known vulnerabilities by installing applicable vendor-supplied security patches."
+                }
+            ]
+        },
+        {
+            "finding_type": "Public Cloud Function",
+            "controls": [
+                {
+                    "id": "1.3",
+                    "name": "Prohibit Direct Public Access",
+                    "description": "Prohibit direct public access between the Internet and any system component in the cardholder data environment."
+                },
+                {
+                    "id": "7.1",
+                    "name": "Limit Access to Cardholder Data",
+                    "description": "Limit access to system components and cardholder data to only those individuals whose job requires such access."
+                }
+            ]
+        },
+        {
+            "finding_type": "Privileged Service Account",
+            "controls": [
+                {
+                    "id": "7.1.2",
+                    "name": "Restrict Access",
+                    "description": "Restrict access to privileged user IDs to least privileges necessary to perform job responsibilities."
+                },
+                {
+                    "id": "7.1.3",
+                    "name": "Default Deny",
+                    "description": "Assign access based on individual personnel's job classification and function."
+                }
+            ]
+        },
+        {
+            "finding_type": "No VPC Connector",
+            "controls": [
+                {
+                    "id": "1.2.1",
+                    "name": "Restrict Inbound and Outbound Traffic",
+                    "description": "Restrict inbound and outbound traffic to that which is necessary for the cardholder data environment, and specifically deny all other traffic."
+                },
+                {
+                    "id": "1.3",
+                    "name": "Prohibit Direct Public Access",
+                    "description": "Prohibit direct public access between the Internet and any system component in the cardholder data environment."
+                }
+            ]
+        },
+        {
+            "finding_type": "Default Compute Service Account",
+            "controls": [
+                {
+                    "id": "2.1",
+                    "name": "Change Vendor Defaults",
+                    "description": "Always change vendor-supplied defaults and remove or disable unnecessary default accounts before installing a system on the network."
+                },
+                {
+                    "id": "7.1.2",
+                    "name": "Restrict Access",
+                    "description": "Restrict access to privileged user IDs to least privileges necessary to perform job responsibilities."
+                }
+            ]
+        },
+        {
+            "finding_type": "Unrestricted Ingress",
+            "controls": [
+                {
+                    "id": "1.2.1",
+                    "name": "Restrict Inbound and Outbound Traffic",
+                    "description": "Restrict inbound and outbound traffic to that which is necessary for the cardholder data environment, and specifically deny all other traffic."
+                },
+                {
+                    "id": "1.3.2",
+                    "name": "Secure Configurations",
+                    "description": "Secure and synchronize router configuration files."
+                }
+            ]
+        },
+        {
+            "finding_type": "Public Cloud SQL Instance",
+            "controls": [
+                {
+                    "id": "1.3",
+                    "name": "Prohibit Direct Public Access",
+                    "description": "Prohibit direct public access between the Internet and any system component in the cardholder data environment."
+                },
+                {
+                    "id": "7.1",
+                    "name": "Limit Access to Cardholder Data",
+                    "description": "Limit access to system components and cardholder data to only those individuals whose job requires such access."
+                }
+            ]
+        },
+        {
+            "finding_type": "Private Google Access Disabled",
+            "controls": [
+                {
+                    "id": "1.2.1",
+                    "name": "Restrict Inbound and Outbound Traffic",
+                    "description": "Restrict inbound and outbound traffic to that which is necessary for the cardholder data environment, and specifically deny all other traffic."
+                },
+                {
+                    "id": "1.3",
+                    "name": "Prohibit Direct Public Access",
+                    "description": "Prohibit direct public access between the Internet and any system component in the cardholder data environment."
+                }
+            ]
+        }
+    ]
+}

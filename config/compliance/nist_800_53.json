@@ -1,0 +1,188 @@
+{
+    "framework": "NIST 800-53",
+    "version": "Rev. 5",
+    "description": "Security and Privacy Controls for Information Systems and Organizations",
+    "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
+    "mappings": [
+        {
+            "finding_type": "Public Storage Bucket",
+            "controls": [
+                {
+                    "id": "AC-3",
+                    "name": "Access Enforcement",
+                    "description": "Enforce approved authorizations for logical access to information and system resources."
+                },
+                {
+                    "id": "AC-4",
+                    "name": "Information Flow Enforcement",
+                    "description": "Enforce approved authorizations for controlling the flow of information within the system and between connected systems."
+                }
+            ]
+        },
+        {
+            "finding_type": "Unencrypted Disk",
+            "controls": [
+                {
+                    "id": "SC-28",
+                    "name": "Protection of Information at Rest",
+                    "description": "Protect the confidentiality and integrity of information at rest."
+                },
+                {
+                    "id": "SC-13",
+                    "name": "Cryptographic Protection",
+                    "description": "Implement FIPS-validated or NSA-approved cryptography in accordance with applicable federal laws."
+                }
+            ]
+        },
+        {
+            "finding_type": "Legacy Authentication Enabled",
+            "controls": [
+                {
+                    "id": "IA-2",
+                    "name": "Identification and Authentication (Organizational Users)",
+                    "description": "Uniquely identify and authenticate organizational users."
+                },
+                {
+                    "id": "IA-5",
+                    "name": "Authenticator Management",
+                    "description": "Manage system authenticators by verifying authenticator content, implementing password complexity requirements, and protecting against unauthorized disclosure."
+                }
+            ]
+        },
+        {
+            "finding_type": "Network Policy Disabled",
+            "controls": [
+                {
+                    "id": "SC-7",
+                    "name": "Boundary Protection",
+                    "description": "Monitor and control communications at the external boundary and at key internal boundaries."
+                },
+                {
+                    "id": "AC-4",
+                    "name": "Information Flow Enforcement",
+                    "description": "Enforce approved authorizations for controlling the flow of information within the system and between connected systems."
+                }
+            ]
+        },
+        {
+            "finding_type": "Node Auto-Upgrade Disabled",
+            "controls": [
+                {
+                    "id": "SI-2",
+                    "name": "Flaw Remediation",
+                    "description": "Identify, report, and correct information system flaws. Test software updates before installation."
+                },
+                {
+                    "id": "SI-3",
+                    "name": "Malicious Code Protection",
+                    "description": "Employ malicious code protection mechanisms at information system entry and exit points."
+                }
+            ]
+        },
+        {
+            "finding_type": "Public Cloud Function",
+            "controls": [
+                {
+                    "id": "AC-3",
+                    "name": "Access Enforcement",
+                    "description": "Enforce approved authorizations for logical access to information and system resources."
+                },
+                {
+                    "id": "AC-17",
+                    "name": "Remote Access",
+                    "description": "Establish and manage remote access sessions with appropriate access controls."
+                }
+            ]
+        },
+        {
+            "finding_type": "Privileged Service Account",
+            "controls": [
+                {
+                    "id": "AC-6",
+                    "name": "Least Privilege",
+                    "description": "Employ the principle of least privilege, allowing only authorized accesses necessary for users to accomplish tasks."
+                },
+                {
+                    "id": "CM-6",
+                    "name": "Configuration Settings",
+                    "description": "Establish mandatory configuration settings for IT products with security capabilities."
+                }
+            ]
+        },
+        {
+            "finding_type": "No VPC Connector",
+            "controls": [
+                {
+                    "id": "SC-7",
+                    "name": "Boundary Protection",
+                    "description": "Monitor and control communications at the external boundary and at key internal boundaries."
+                },
+                {
+                    "id": "CA-3",
+                    "name": "System Interconnections",
+                    "description": "Authorize connections from the information system to other information systems through the use of Interconnection Security Agreements."
+                }
+            ]
+        },
+        {
+            "finding_type": "Default Compute Service Account",
+            "controls": [
+                {
+                    "id": "AC-6",
+                    "name": "Least Privilege",
+                    "description": "Employ the principle of least privilege, allowing only authorized accesses necessary for users to accomplish tasks."
+                },
+                {
+                    "id": "IA-2",
+                    "name": "Identification and Authentication (Organizational Users)",
+                    "description": "Uniquely identify and authenticate organizational users."
+                }
+            ]
+        },
+        {
+            "finding_type": "Unrestricted Ingress",
+            "controls": [
+                {
+                    "id": "SC-7",
+                    "name": "Boundary Protection",
+                    "description": "Monitor and control communications at the external boundary and at key internal boundaries."
+                },
+                {
+                    "id": "AC-4",
+                    "name": "Information Flow Enforcement",
+                    "description": "Enforce approved authorizations for controlling the flow of information within the system and between connected systems."
+                }
+            ]
+        },
+        {
+            "finding_type": "Public Cloud SQL Instance",
+            "controls": [
+                {
+                    "id": "SC-7",
+                    "name": "Boundary Protection",
+                    "description": "Monitor and control communications at the external boundary and at key internal boundaries."
+                },
+                {
+                    "id": "AC-3",
+                    "name": "Access Enforcement",
+                    "description": "Enforce approved authorizations for logical access to information and system resources."
+                }
+            ]
+        },
+        {
+            "finding_type": "Private Google Access Disabled",
+            "controls": [
+                {
+                    "id": "SC-7",
+                    "name": "Boundary Protection",
+                    "description": "Monitor and control communications at the external boundary and at key internal boundaries."
+                },
+                {
+                    "id": "AC-20",
+                    "name": "Use of External Systems",
+                    "description": "Establish terms and conditions for external systems to access information systems. Limit use of portable storage devices on external systems."
+                }
+            ]
+        }
+    ]
+}

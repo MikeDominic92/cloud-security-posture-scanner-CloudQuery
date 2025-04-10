@@ -13,8 +13,14 @@ import pandas as pd
 import json
 from pathlib import Path
 
+# Import compliance mapper if available
+try:
+    from compliance_mapper import ComplianceMapper
+except ImportError:
+    ComplianceMapper = None
+
 class SecurityReportGenerator:
-    def __init__(self, db_config=None):
+    def __init__(self, db_config=None, compliance_dir=None):
         self.conn = None
         self.db_config = db_config or {
             'dbname': 'cloudquery',
@@ -24,6 +30,18 @@ class SecurityReportGenerator:
             'port': '5432'
         }
         self.report_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        
+        # Initialize compliance mapper if available
+        self.compliance_mapper = None
+        self.compliance_enabled = False
+        if ComplianceMapper is not None:
+            self.compliance_dir = compliance_dir
+            self.compliance_mapper = ComplianceMapper(compliance_dir)
+            if self.compliance_mapper.frameworks:
+                self.compliance_enabled = True
+                print(f"Loaded {len(self.compliance_mapper.frameworks)} compliance frameworks")
+            else:
+                print("No compliance frameworks found. Compliance reporting will be disabled.")
         
     def connect_to_database(self):
         """Establishes connection to the PostgreSQL database"""
@@ -78,7 +96,7 @@ class SecurityReportGenerator:
             print(f"Error running query {query_file}: {str(e)}")
             return pd.DataFrame(), query_file.stem
     
-    def generate_html_report(self, findings, output_dir):
+    def generate_html_report(self, findings, output_dir, mapped_df=None):
         """Generates an enhanced HTML report from security findings with resource type categorization"""
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -126,11 +144,14 @@ class SecurityReportGenerator:
                     <p>This report identifies security misconfigurations and compliance issues in your Google Cloud Platform environment using CloudQuery's security posture management capabilities.</p>
             """)
             
-            # Process findings for better reporting
-            all_df = pd.DataFrame()
-            for df, _ in findings:
-                if not df.empty:
-                    all_df = pd.concat([all_df, df])
+            # Use the pre-processed dataframe if provided
+            all_df = mapped_df if mapped_df is not None else pd.DataFrame()
+            
+            # If not provided, create it from findings
+            if all_df.empty:
+                for df, _ in findings:
+                    if not df.empty:
+                        all_df = pd.concat([all_df, df])
             
             # If no findings, handle empty case
             if all_df.empty:
@@ -163,6 +184,15 @@ class SecurityReportGenerator:
                         <li><span class="severity-low">Low Severity:</span> {low_findings}</li>
                     </ul>
             """)
+            
+            # Add compliance frameworks information if available
+            if self.compliance_enabled:
+                framework_names = self.compliance_mapper.get_available_frameworks()
+                if framework_names:
+                    f.write("<p><strong>Compliance Frameworks:</strong></p><ul>")
+                    for framework in framework_names:
+                        f.write(f"<li>{framework} - See dedicated compliance report for details</li>")
+                    f.write("</ul>")
             
             # Add resource type breakdown if available
             if resource_types.any():
@@ -274,9 +304,26 @@ class SecurityReportGenerator:
                 print(f"Running query: {query_file.name}")
                 df, query_name = self.run_security_query(query_file)
                 findings.append((df, query_name))
+            
+            # Process findings for reporting
+            all_df = pd.DataFrame()
+            for df, _ in findings:
+                if not df.empty:
+                    all_df = pd.concat([all_df, df])
+            
+            # Map findings to compliance frameworks if enabled
+            if self.compliance_enabled and not all_df.empty:
+                print("Mapping security findings to compliance frameworks...")
+                all_df = self.compliance_mapper.map_findings_to_compliance(all_df)
                 
-            # Generate reports
-            html_file = self.generate_html_report(findings, output_dir)
+                # Generate compliance-specific reports
+                print("Generating compliance reports...")
+                self.compliance_mapper.generate_html_compliance_report(all_df, output_dir)
+                compliance_json = self.compliance_mapper.generate_compliance_report(all_df, output_dir)
+                print(f"Compliance reports generated: {compliance_json}")
+            
+            # Generate standard reports
+            html_file = self.generate_html_report(findings, output_dir, mapped_df=all_df)
             csv_files = self.generate_csv_reports(findings, output_dir)
             
             return True
@@ -307,6 +354,8 @@ def main():
                       help='Directory to save reports')
     parser.add_argument('--db-config',
                       help='Database connection parameters (format: "host=localhost port=5432 dbname=cloudquery user=postgres password=postgres")')
+    parser.add_argument('--compliance-dir', default='../config/compliance',
+                      help='Directory containing compliance framework mappings')
     
     args = parser.parse_args()
     
@@ -318,9 +367,10 @@ def main():
         db_config = parse_db_config(args.db_config)
     
     # Create report generator and run queries
-    generator = SecurityReportGenerator(db_config)
+    generator = SecurityReportGenerator(db_config, compliance_dir=args.compliance_dir)
     if generator.run_all_queries(args.query_dir, args.output_dir):
         print("\n✅ Security reports generated successfully!")
+        print("\n🔍 Check for compliance reports in the output directory")
     else:
         print("\n❌ Error generating security reports")
         sys.exit(1)

@@ -1,0 +1,188 @@
+{
+    "framework": "SOC2",
+    "version": "2017",
+    "description": "Service Organization Control 2 - Trust Services Criteria",
+    "url": "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/trustservices.html",
+    "mappings": [
+        {
+            "finding_type": "Public Storage Bucket",
+            "controls": [
+                {
+                    "id": "CC6.1",
+                    "name": "Logical Access Security",
+                    "description": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                },
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                }
+            ]
+        },
+        {
+            "finding_type": "Unencrypted Disk",
+            "controls": [
+                {
+                    "id": "CC6.7",
+                    "name": "Encryption of Data",
+                    "description": "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives."
+                },
+                {
+                    "id": "CC6.8",
+                    "name": "Data Confidentiality",
+                    "description": "The entity implements controls to prevent or detect and act upon unauthorized access to or disclosure of confidential information during its creation, use, processing, transmission, and storage."
+                }
+            ]
+        },
+        {
+            "finding_type": "Legacy Authentication Enabled",
+            "controls": [
+                {
+                    "id": "CC6.1",
+                    "name": "Logical Access Security",
+                    "description": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                },
+                {
+                    "id": "CC6.2",
+                    "name": "User Authentication",
+                    "description": "Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users whose access is administered by the entity."
+                }
+            ]
+        },
+        {
+            "finding_type": "Network Policy Disabled",
+            "controls": [
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                },
+                {
+                    "id": "CC7.1",
+                    "name": "System Operations Identification",
+                    "description": "The entity identifies and manages security incidents promptly to meet the entity's objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "Node Auto-Upgrade Disabled",
+            "controls": [
+                {
+                    "id": "CC7.1",
+                    "name": "System Operations Identification",
+                    "description": "The entity identifies and manages security incidents promptly to meet the entity's objectives."
+                },
+                {
+                    "id": "CC8.1",
+                    "name": "Change Management",
+                    "description": "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure, data, software, and procedures to meet its objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "Public Cloud Function",
+            "controls": [
+                {
+                    "id": "CC6.1",
+                    "name": "Logical Access Security",
+                    "description": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                },
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                }
+            ]
+        },
+        {
+            "finding_type": "Privileged Service Account",
+            "controls": [
+                {
+                    "id": "CC6.3",
+                    "name": "User Authorization",
+                    "description": "The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets based on roles, responsibilities, or the system design and changes, giving consideration to the concepts of least privilege and segregation of duties, to meet the entity's objectives."
+                },
+                {
+                    "id": "CC6.1",
+                    "name": "Logical Access Security",
+                    "description": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "No VPC Connector",
+            "controls": [
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                },
+                {
+                    "id": "CC6.7",
+                    "name": "Encryption of Data",
+                    "description": "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "Default Compute Service Account",
+            "controls": [
+                {
+                    "id": "CC6.3",
+                    "name": "User Authorization",
+                    "description": "The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets based on roles, responsibilities, or the system design and changes, giving consideration to the concepts of least privilege and segregation of duties, to meet the entity's objectives."
+                },
+                {
+                    "id": "CC6.4",
+                    "name": "Privileged Access",
+                    "description": "The entity restricts physical and logical access to sensitive system components by reviewing, creating, modifying and removing access in accordance with the entity's objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "Unrestricted Ingress",
+            "controls": [
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                },
+                {
+                    "id": "CC6.1",
+                    "name": "Logical Access Security",
+                    "description": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "Public Cloud SQL Instance",
+            "controls": [
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                },
+                {
+                    "id": "CC6.1",
+                    "name": "Logical Access Security",
+                    "description": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                }
+            ]
+        },
+        {
+            "finding_type": "Private Google Access Disabled",
+            "controls": [
+                {
+                    "id": "CC6.6",
+                    "name": "Logical Access Security Measures",
+                    "description": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                },
+                {
+                    "id": "CC6.7",
+                    "name": "Encryption of Data",
+                    "description": "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives."
+                }
+            ]
+        }
+    ]
+}
