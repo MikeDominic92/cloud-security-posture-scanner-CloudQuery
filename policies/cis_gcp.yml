@@ -1,0 +1,7 @@
+kind: policy
+spec:
+  name: cis_gcp_v1.2.0
+  path: cloudquery/cis_gcp_v1.2.0
+  version: "v1.0.0"  # Check for latest version at https://hub.cloudquery.io/
+  args:
+    registry: gcp  # Specifies the registry to use for this policy

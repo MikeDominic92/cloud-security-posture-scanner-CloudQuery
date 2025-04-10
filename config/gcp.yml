@@ -1,0 +1,25 @@
+kind: source
+spec:
+  name: gcp
+  path: cloudquery/gcp
+  version: "v10.1.0"  # Check for latest version at https://hub.cloudquery.io/
+  tables: ["gcp_compute_instances", "gcp_compute_disks", "gcp_storage_buckets", 
+          "gcp_iam_roles", "gcp_iam_service_accounts", "gcp_kms_crypto_keys",
+          "gcp_sql_instances", "gcp_compute_firewalls", "gcp_logging_metrics",
+          "gcp_compute_networks", "gcp_compute_ssl_policies", "gcp_dns_managed_zones"]
+  destinations: ["postgresql"]
+  spec:
+    # You can specify multiple projects or use the default project from gcloud
+    project_ids: ["your-gcp-project-id"]  # Replace with your actual GCP project ID
+    # Authentication uses Application Default Credentials
+    # Run 'gcloud auth application-default login' to set up
+
+---
+kind: destination
+spec:
+  name: postgresql
+  path: cloudquery/postgresql
+  version: "v7.1.0"  # Check for latest version at https://hub.cloudquery.io/
+  spec:
+    connection_string: "postgresql://username:password@localhost:5432/cloudquery?sslmode=disable"
+    # Update with your PostgreSQL connection details
