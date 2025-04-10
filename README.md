@@ -2,20 +2,37 @@
 
 A comprehensive tool for scanning Google Cloud Platform environments to identify security misconfigurations, compliance issues, and potential vulnerabilities.
 
-## Overview
+## What is CloudQuery?
 
-This project uses CloudQuery to extract resource data from GCP environments, store it in PostgreSQL, and run security posture analysis against industry best practices and compliance frameworks including:
+CloudQuery is a powerful open-source cloud asset inventory and security posture management platform that consists of three main components:
 
-- CIS Google Cloud Benchmark
-- NIST 800-53
-- SOC2
-- PCI-DSS
+1. **Data Pipelines**: CloudQuery extracts data from cloud providers and transforms it into a normalized schema.
+2. **Cloud Asset Inventory**: It creates a comprehensive inventory of cloud resources across multiple providers.
+3. **Cloud Security Posture Management (CSPM)**: Enables security checks and compliance validation against best practices.
+
+This technology solves critical challenges in cloud governance by providing visibility across complex environments, enabling security automation, and streamlining compliance efforts.
+
+## How This Project Uses CloudQuery's Technology
+
+This implementation demonstrates practical application of CloudQuery's capabilities by:
+
+1. **Leveraging the GCP Provider**: We use CloudQuery's official GCP provider to extract detailed resource configurations from Google Cloud environments.
+
+2. **SQL-Based Security Analysis**: We've implemented custom SQL queries that analyze the extracted data to identify security risks and compliance gaps.
+
+3. **Automated Reporting**: Our custom Python scripts integrate with CloudQuery's PostgreSQL backend to generate actionable security reports.
+
+4. **Multi-framework Compliance**: We map findings to major compliance frameworks including:
+   - CIS Google Cloud Benchmark
+   - NIST 800-53
+   - SOC2
+   - PCI-DSS
 
 ## Project Status & Development Process
 
 This project is being developed in phases to create a comprehensive security scanning solution for GCP environments. Below is our development roadmap and current progress:
 
-### ✅ Phase 1: Environment Setup (Completed)
+### Phase 1: Environment Setup (Completed)
 
 We've established the foundational structure with configuration files, directory organization, and basic security queries. The initial setup includes:
 
@@ -24,7 +41,7 @@ We've established the foundational structure with configuration files, directory
 - CIS benchmark policy definitions
 - Initial SQL security queries for common vulnerabilities
 
-### ✅ Phase 2: Reporting & Visualization (Completed)
+### Phase 2: Reporting & Visualization (Completed)
 
 We've implemented comprehensive reporting capabilities that transform raw findings into actionable insights:
 
@@ -33,7 +50,7 @@ We've implemented comprehensive reporting capabilities that transform raw findin
 - Added CSV export functionality for data analysis
 - Designed the reporting system with PostgreSQL integration
 
-### 🔄 Phase 3: Advanced Security Checks (In Progress)
+### Phase 3: Advanced Security Checks (In Progress)
 
 We're expanding our security coverage to include more GCP services and specialized checks:
 
@@ -42,13 +59,13 @@ We're expanding our security coverage to include more GCP services and specializ
 - Default service account usage detection
 - Network security group analysis
 
-### 🔲 Phase 4: Compliance Frameworks (Planned)
+### Phase 4: Compliance Frameworks (Planned)
 
 - Mapping findings to specific compliance requirements
 - Creating compliance-specific reports
 - Implementing remediation guidance aligned with standards
 
-### 🔲 Phase 5: Automation & Integration (Planned)
+### Phase 5: Automation & Integration (Planned)
 
 - Creating CI/CD integration
 - Building notification systems
