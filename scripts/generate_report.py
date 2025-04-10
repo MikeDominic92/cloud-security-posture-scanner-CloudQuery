@@ -42,13 +42,22 @@ class SecurityReportGenerator:
             print("Database connection closed")
     
     def get_query_files(self, query_dir):
-        """Gets list of SQL query files in the specified directory"""
+        """Gets list of SQL query files in the specified directory
+        Prioritizes the all_security_checks.sql file if available"""
         query_dir = Path(query_dir)
         if not query_dir.is_dir():
             print(f"Error: {query_dir} is not a valid directory")
             return []
+        
+        all_files = list(query_dir.glob("*.sql"))
+        
+        # Check if all_security_checks.sql exists and prioritize it
+        all_checks_file = query_dir / "all_security_checks.sql"
+        if all_checks_file.exists():
+            print("Found comprehensive security checks file. Using it for reporting.")
+            return [all_checks_file]
             
-        return list(query_dir.glob("*.sql"))
+        return all_files
     
     def run_security_query(self, query_file):
         """Runs a single security query and returns the results"""
@@ -70,7 +79,7 @@ class SecurityReportGenerator:
             return pd.DataFrame(), query_file.stem
     
     def generate_html_report(self, findings, output_dir):
-        """Generates an HTML report from security findings"""
+        """Generates an enhanced HTML report from security findings with resource type categorization"""
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         
@@ -86,15 +95,26 @@ class SecurityReportGenerator:
                     body { font-family: Arial, sans-serif; margin: 20px; }
                     h1 { color: #333366; }
                     h2 { color: #333366; margin-top: 30px; }
+                    h3 { color: #666699; margin-top: 20px; }
                     .summary { background-color: #f0f0f0; padding: 15px; border-radius: 5px; }
-                    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+                    .resource-section { margin-top: 20px; border-left: 4px solid #4285F4; padding-left: 15px; }
+                    table { border-collapse: collapse; width: 100%; margin-top: 10px; margin-bottom: 30px; }
                     th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
-                    th { background-color: #4CAF50; color: white; }
+                    th { background-color: #4285F4; color: white; }
                     tr:nth-child(even) { background-color: #f2f2f2; }
-                    .severity-high { background-color: #f8d7da; }
-                    .severity-medium { background-color: #fff3cd; }
-                    .severity-low { background-color: #d1ecf1; }
-                    .footer { margin-top: 30px; font-size: 0.8em; color: #666; }
+                    .severity-high { background-color: #f8d7da; color: #721c24; font-weight: bold; }
+                    .severity-medium { background-color: #fff3cd; color: #856404; }
+                    .severity-low { background-color: #d1ecf1; color: #0c5460; }
+                    .resource-type-kubernetes { border-left: 4px solid #326CE5; }
+                    .resource-type-compute { border-left: 4px solid #4285F4; }
+                    .resource-type-storage { border-left: 4px solid #EA4335; }
+                    .resource-type-network { border-left: 4px solid #34A853; }
+                    .resource-type-cloud_functions { border-left: 4px solid #FBBC05; }
+                    .resource-type-service_accounts { border-left: 4px solid #AB47BC; }
+                    .footer { margin-top: 30px; font-size: 0.8em; color: #666; border-top: 1px solid #ddd; padding-top: 10px; }
+                    .nav { position: sticky; top: 0; background: white; padding: 10px 0; border-bottom: 1px solid #ddd; }
+                    .nav-item { margin-right: 15px; display: inline-block; }
+                    .nav-item a { text-decoration: none; color: #4285F4; }
                 </style>
             </head>
             <body>
@@ -103,44 +123,115 @@ class SecurityReportGenerator:
                 
                 <div class="summary">
                     <h2>Executive Summary</h2>
-                    <p>This report identifies security misconfigurations and compliance issues in your Google Cloud Platform environment.</p>
+                    <p>This report identifies security misconfigurations and compliance issues in your Google Cloud Platform environment using CloudQuery's security posture management capabilities.</p>
             """)
+            
+            # Process findings for better reporting
+            all_df = pd.DataFrame()
+            for df, _ in findings:
+                if not df.empty:
+                    all_df = pd.concat([all_df, df])
+            
+            # If no findings, handle empty case
+            if all_df.empty:
+                f.write("<p>No security issues found in the scanned environment!</p></div>")
+                return html_file
             
             # Add summary statistics
-            total_findings = sum(len(df) for df, _ in findings)
-            high_findings = sum(len(df[df['severity'] == 'High']) for df, _ in findings if 'severity' in df.columns)
-            medium_findings = sum(len(df[df['severity'] == 'Medium']) for df, _ in findings if 'severity' in df.columns)
-            low_findings = sum(len(df[df['severity'] == 'Low']) for df, _ in findings if 'severity' in df.columns)
+            total_findings = len(all_df)
+            projects_affected = len(all_df['project_id'].unique()) if 'project_id' in all_df.columns else 0
             
+            # Calculate severity counts
+            high_findings = len(all_df[all_df['severity'] == 'High']) if 'severity' in all_df.columns else 0
+            medium_findings = len(all_df[all_df['severity'] == 'Medium']) if 'severity' in all_df.columns else 0
+            low_findings = len(all_df[all_df['severity'] == 'Low']) if 'severity' in all_df.columns else 0
+            
+            # Get resource types if available
+            resource_types = []
+            if 'resource_type' in all_df.columns:
+                resource_types = all_df['resource_type'].unique()
+                resource_counts = all_df['resource_type'].value_counts().to_dict()
+            
+            # Write summary statistics
             f.write(f"""
                     <p><strong>Total Findings:</strong> {total_findings}</p>
-                    <p><strong>High Severity:</strong> {high_findings}</p>
-                    <p><strong>Medium Severity:</strong> {medium_findings}</p>
-                    <p><strong>Low Severity:</strong> {low_findings}</p>
-                </div>
+                    <p><strong>Projects Affected:</strong> {projects_affected}</p>
+                    <p><strong>Severity Breakdown:</strong></p>
+                    <ul>
+                        <li><span class="severity-high">High Severity:</span> {high_findings}</li>
+                        <li><span class="severity-medium">Medium Severity:</span> {medium_findings}</li>
+                        <li><span class="severity-low">Low Severity:</span> {low_findings}</li>
+                    </ul>
             """)
             
-            # Add detailed findings for each query
-            for df, query_name in findings:
-                if not df.empty:
-                    f.write(f"<h2>{query_name.replace('_', ' ').title()}</h2>")
-                    
-                    # Apply CSS classes based on severity
-                    if 'severity' in df.columns:
-                        html = df.to_html(classes='data', index=False, escape=False)
-                        for severity in ['High', 'Medium', 'Low']:
-                            html = html.replace(f'<td>{severity}</td>', 
-                                             f'<td class="severity-{severity.lower()}">{severity}</td>')
-                        f.write(html)
+            # Add resource type breakdown if available
+            if resource_types.any():
+                f.write("<p><strong>Resources Affected:</strong></p><ul>")
+                for res_type, count in resource_counts.items():
+                    f.write(f"<li>{res_type.replace('_', ' ').title()}: {count}</li>")
+                f.write("</ul>")
+            
+            f.write("</div>")
+            
+            # Create navigation if we have resource types
+            if 'resource_type' in all_df.columns and len(resource_types) > 0:
+                f.write("<div class='nav'>")
+                f.write("<div class='nav-item'><a href='#top'>Top</a></div>")
+                for res_type in resource_types:
+                    section_id = f"section-{res_type}"
+                    f.write(f"<div class='nav-item'><a href='#{section_id}'>{res_type.replace('_', ' ').title()}</a></div>")
+                f.write("</div>")
+            
+                # Group findings by resource type
+                for res_type in resource_types:
+                    type_df = all_df[all_df['resource_type'] == res_type].copy()
+                    if not type_df.empty:
+                        section_id = f"section-{res_type}"
+                        f.write(f"<div id='{section_id}' class='resource-section resource-type-{res_type}'>")
+                        f.write(f"<h2>{res_type.replace('_', ' ').title()} Security Issues</h2>")
+                        
+                        # Group by finding type within resource type
+                        finding_types = type_df['finding'].unique()
+                        for finding in finding_types:
+                            finding_df = type_df[type_df['finding'] == finding].copy()
+                            severity = finding_df['severity'].iloc[0] if 'severity' in finding_df.columns else 'Unknown'
+                            
+                            f.write(f"<h3 class='severity-{severity.lower()}'>{finding}</h3>")
+                            f.write(f"<p>{finding_df['description'].iloc[0]}</p>")
+                            f.write(f"<p><strong>Remediation:</strong> {finding_df['remediation'].iloc[0]}</p>")
+                            
+                            # Display the affected resources
+                            display_cols = ['name', 'project_id', 'location', 'severity']
+                            display_cols = [col for col in display_cols if col in finding_df.columns]
+                            display_df = finding_df[display_cols]
+                            
+                            html = display_df.to_html(classes=f'data severity-{severity.lower()}', index=False, escape=False)
+                            f.write(html)
+                        
+                        f.write("</div>")
+            else:
+                # Legacy reporting if we don't have resource_type
+                for df, query_name in findings:
+                    if not df.empty:
+                        f.write(f"<h2>{query_name.replace('_', ' ').title()}</h2>")
+                        
+                        # Apply CSS classes based on severity
+                        if 'severity' in df.columns:
+                            html = df.to_html(classes='data', index=False, escape=False)
+                            for severity in ['High', 'Medium', 'Low']:
+                                html = html.replace(f'<td>{severity}</td>', 
+                                                  f'<td class="severity-{severity.lower()}">{severity}</td>')
+                            f.write(html)
+                        else:
+                            f.write(df.to_html(index=False))
                     else:
-                        f.write(df.to_html(index=False))
-                else:
-                    f.write(f"<h2>{query_name.replace('_', ' ').title()}</h2>")
-                    f.write("<p>No issues found!</p>")
+                        f.write(f"<h2>{query_name.replace('_', ' ').title()}</h2>")
+                        f.write("<p>No issues found!</p>")
             
             f.write("""
                 <div class="footer">
                     <p>Report generated by CloudQuery GCP Security Scanner</p>
+                    <p>This tool demonstrates the power of CloudQuery's open-source technology for identifying security risks across cloud environments.</p>
                     <p>For more information, visit <a href="https://github.com/MikeDominic92/cloud-security-posture-scanner-CloudQuery">GitHub Repository</a></p>
                 </div>
             </body>
